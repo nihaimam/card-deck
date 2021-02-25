@@ -1,0 +1,436 @@
+Script started on Wed 01 Nov 2017 11:29:08 PM EDT
+[?1034hbash-4.1$ una[K[K[Kuname -a
+Linux Zeus-2 2.6.32-696.10.2.el6.centos.plus.x86_64 #1 SMP Tue Sep 12 23:39:53 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
+bash-4.1$ pwd
+/home/nimam/CS262/project2_nimam_206
+bash-4.1$ ls
+Makefile  project2_deck_nimam_206.c  project2_int_nimam_206.c  typescript_project2_nimam_206
+bash-4.1$ cat project2_int_nimam_206.c
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+  int data;
+  struct Node *next;
+};
+
+//prototypes
+struct Node *newList(void);
+struct Node *insertNode(struct Node *prev, int data);
+struct Node *removeNode(struct Node * prev);
+int length(struct Node *head);
+void printList(struct Node *head);
+
+struct Node *newList(void) // returns a head of a new empty list
+{
+  // create the new head pointer, and return 
+  struct Node* head = (struct Node*)malloc(sizeof(struct Node));
+  head->data = -1;
+  head->next = 0;
+  return head;
+}
+
+struct Node *insertNode(struct Node *prev, int data) // inserts a new node with data field data after prev
+{
+  // create and allocate memory
+  struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+  if (node == NULL)
+  {
+    printf("ERROR!!!");
+  }
+  // store data in node
+  node->data = data;
+  // create a temp node
+  struct Node* temp;
+  // if prev is 0 or the data value is greater than the node data value
+  if(prev == 0 || prev->data >= node->data)
+  {
+    // node next is prev
+    node->next = prev;
+    // prev node is node
+    prev = node;
+  }
+  else
+  {
+    temp = prev;
+    // until temp next is not 0 and node next data is less than node data
+    while(temp->next != 0 && temp->next->data < node->data)
+    {
+      temp = temp->next;
+    }
+    // node next is temp next and temp next is node
+    node->next = temp->next;
+    temp->next = node;
+  }
+  return temp;
+}
+
+struct Node *removeNode(struct Node * prev) // deletes the node after prev 
+{
+  struct Node* ahead;
+  struct Node* node;
+  // the node to delete
+  node = prev->next;
+  // the node ahead
+  ahead = node->next;
+  // update links
+  prev->next = ahead;
+  // return the removed node
+  return node;
+}
+
+int length(struct Node *head) // number of elements in the list
+{
+  struct Node* node;
+  int len;
+  // start with the length 0, and first node
+  len = 0;
+  node = head->next;
+  // repeat till traverse is complete
+  while (node != 0)
+  {
+  // length increment whenever we have a new node
+    len++;
+    // move to next node
+    node = node->next;
+  }
+  // return the computed length
+  return len;
+}
+
+void printList(struct Node *head) // print the data fields for the entire list
+{
+  struct Node* node;
+  // start with the first node
+  node = head->next;
+  // repeat till traverse is complete
+  while (node != 0)
+  {
+    // print the value
+    printf("%d ", node->data);
+    // move to next node
+    node = node->next;
+  }
+  printf("\n\n");
+}
+
+int main()
+{
+  struct Node* deck;
+  int val, x;
+  deck = newList();
+  srand(7092);	
+  for (x = 0; x < 10; x++)
+  {
+    val = rand() % 1001;
+    printf("Random Value: %d\n", val);
+    insertNode(deck, val);		
+    printf("List Length : %d\n", length(deck));
+    printList(deck);
+  }
+  printf("\nFinal List Length : %d\n", length(deck));
+  printList(deck);
+  removeNode(deck);
+  return 0;
+}
+bash-4.1$ cat project2_int_nimam_206.c[1P_nimam_206.c[1P_nimam_206.c[1P_nimam_206.cd_nimam_206.ce_nimam_206.cc_nimam_206.ck_nimam_206.c
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+  char* data;
+  char suit;
+  struct Node *next;
+};
+
+struct Node *newList(void) // returns a head of a new empty list
+{
+  // create the new head pointer, and return
+  struct Node* head = (struct Node*)malloc(sizeof(struct Node));
+  if (head == NULL)
+  {
+    printf("ERROR!!!");
+  }
+  head->data = "-1";
+  head->suit = 'n';
+  head->next = 0;
+  return head;
+}
+
+struct Node *insert(struct Node *prev, char *data , char suit) // inserts a new node with data field data after prev
+{
+  struct Node* ahead;
+  struct Node* node;
+  // get the node ahead from prev
+  ahead = prev->next;
+  // allocate and store the new node
+  node = (struct Node*)malloc(sizeof(struct Node));
+  node->data = data;
+  node->suit = suit;
+  // updated links sequence : prev -> node -> ahead
+  prev->next = node;
+  node->next = ahead;
+}
+
+struct Node *delete(struct Node * prev) // deletes the node after prev
+{
+  struct Node* ahead;
+  struct Node* node;
+  // the node to delete
+  node = prev->next;
+  // the node ahead
+  ahead = node->next;
+  // update links
+  prev->next = ahead;
+  // return the removed node
+  return node;
+}
+
+int length(struct Node *head) // number of elements in the list
+{
+  struct Node* node;
+  int len;
+  // start with the length 0, and first node
+  len = 0;
+  node = head->next;
+  // repeat till traverse is complete
+  while (node != 0)
+  {
+    // length increment whenever we have a new node
+    len++;
+    // move to next node
+    node = node->next;
+  }
+  // return the computed length
+  return len;
+}
+
+void printList(struct Node *head) // print the data fields for the entire list
+{
+  struct Node* node;
+  // start with the first node
+  node = head->next;
+  // repeat till traverse is complete
+  while (node != 0)
+  {
+    // print the valuen
+    printf("(%s,%c) ", node->data , node->suit);
+    // move to next node
+    node = node->next;
+  }
+  printf("\n");
+}
+
+struct Node *randomShuffle(struct Node *olddeck) // returns new deck
+{
+  int len, i, j, k;
+  struct Node* newdeck;
+  struct Node* node;
+  struct Node* temp;
+  // get the length of our list
+  len = length(olddeck);
+  //Make a new linked list newdeck
+  newdeck = newList();
+  for (i = len - 1; i >= 0; i--)
+  {
+    // delete a node from the olddeck
+    node = delete(olddeck);
+    // generate a random number
+    j = rand() % (len - i);
+    // loop to that random index on olddeck
+    temp = newdeck;
+    for (k = 0; k < j-1; k++)
+      temp = temp->next;// insert at front newdeck
+    insert(temp, node->data , node->suit);
+    // free the node pointer on the olddeck itself
+    free(node);
+  }
+  // return the updated new deck
+  return newdeck;
+}
+
+int main()
+{
+  struct Node* deck;
+  struct Node* temp;
+  int x , y;
+  char suit;
+  char* data;
+  deck = newList();
+  srand(7092);
+  for(y = 0 ; y < 4 ; y++)
+  {
+    for (x = 0; x < 13; x++)
+    {
+      switch(x)
+      {
+        case 0: data = "A"; break;
+        case 1: data = "1"; break;
+        case 2: data = "2"; break;
+        case 3: data = "3"; break;
+        case 4: data = "4"; break;
+        case 5: data = "5"; break;
+        case 6: data = "6"; break;
+        case 7: data = "7"; break;
+        case 8: data = "8"; break;
+        case 9: data = "9"; break;
+        case 10: data = "10"; break;
+        case 11: data = "J"; break;
+        case 12: data = "Q"; break;
+        default: data = "K"; break;
+      }
+      switch(y)
+      {
+        case 0: suit = 'C'; break;
+        case 1: suit = 'D'; break;
+        case 2: suit = 'H'; break;
+        default: suit = 'S'; break;
+      }
+      temp = deck;
+      while (temp->next != 0)
+      temp = temp->next;
+      insert(temp, data , suit);
+    }
+  }
+  printf("Deck:\n\n");
+  printList(deck);	
+  deck = randomShuffle(deck);
+  printf("\nShuffled Deck:\n\n");
+  printList(deck);
+  return 0;
+}
+bash-4.1$ cat Makefile
+CFLAGS=-Wall -g
+
+make:
+	gcc -g -o project2_int_nimam_206 project2_int_nimam_206.c
+	gcc -g -o project2_deck_nimam_206 project2_deck_nimam_206.c
+clean:
+	rm -f project2_int_nimam_206 project2_deck_nimam_206
+bash-4.1$ make
+gcc -g -o project2_int_nimam_206 project2_int_nimam_206.c
+gcc -g -o project2_deck_nimam_206 project2_deck_nimam_206.c
+bash-4.1$ ls
+Makefile		 project2_deck_nimam_206.c  project2_int_nimam_206.c
+project2_deck_nimam_206  project2_int_nimam_206     typescript_project2_nimam_206
+bash-4.1$ lsmakecat Makefileproject2_deck_nimam_206.c[1Pint_nimam_206.c[C[C[C[C[C[C[C[C[C[Cls[Kpwduname -acat project2_int_nimam_206[C[C[C[C[C[C[C[C[C[Cls[Kpwduname -arm project2_int_nimam_206deck_nimam_206[C[C[C[C[C[C[C[C[C[Cls[Kmakevi Makefile[7Pmakevi project2_int_nimam_206.c[C[C[C[C[C[C[C[C[C[Cmake[Kvi project2_int_nimam_206.c[C[C[C[C[C[C[C[C[C[Cmake[Kvi Makefilels[Kmake clean[K[2Plsrm project2_deck_nimam_206[1Pint_nimam_206.o[C[C[C[C[C[C[C[C[C[Cls[Krm file.txtls[Krm intdeckls[Kvi Makefile[7Pmakevi project2_int_nimam_206.c[C[C[C[C[C[C[C[C[C[Cmake[Kvi Makefilels[Kmakevi Makefile[7Pmake[2Plsvi Makefile[7Pmakevi project2_int_nimam_206.c[C[C[C[C[C[C[C[C[C[Cmake[Kvi Makefilels[Krm deck[1Pint[4Plsrm file.txtls[Krm project2_int_nimam_206.o[Kdeck_nimam_206[C[C[C[C[C[C[C[C[C[Cls[Kmake cleanls[Kvi Makefile[7Pmakevi project2_int_nimam_206.c[C[C[C[C[C[C[C[C[C[Cmake[Kvi project2_int_nimam_206.c[C[C[C[C[C[C[C[C[C[Cmake[Kvi Makefile[7Pmake[2Plsrm project2_deck_nimam_206[1Pint_nimam_206[C[C[C[C[C[C[C[C[C[Cuname -a[K[5Ppwd[1Plscat project2_int_nimam_206[C[C[C[C[C[C[C[C[C[Cuname -a[K[5Ppwd[1Plscat project2_int_nimam_206.cdeck_nimam_206.c[C[C[C[C[C[C[C[C[C[C[C[C[C[CMakefile[K[C[C[C[C[C[C[C[C[C[C[8Pmake[2Pls[Kvalgrind --leak-check=yes intdddd[K[K[K[K[K[K[Kproject2_int_nimam_206
+==18615== Memcheck, a memory error detector
+==18615== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==18615== Using Valgrind-3.12.0 and LibVEX; rerun with -h for copyright info
+==18615== Command: project2_int_nimam_206
+==18615== 
+Random Value: 855
+List Length : 1
+855 
+
+Random Value: 396
+List Length : 2
+396 855 
+
+Random Value: 326
+List Length : 3
+326 396 855 
+
+Random Value: 795
+List Length : 4
+326 396 795 855 
+
+Random Value: 204
+List Length : 5
+204 326 396 795 855 
+
+Random Value: 446
+List Length : 6
+204 326 396 446 795 855 
+
+Random Value: 836
+List Length : 7
+204 326 396 446 795 836 855 
+
+Random Value: 520
+List Length : 8
+204 326 396 446 520 795 836 855 
+
+Random Value: 53
+List Length : 9
+53 204 326 396 446 520 795 836 855 
+
+Random Value: 770
+List Length : 10
+53 204 326 396 446 520 770 795 836 855 
+
+
+Final List Length : 10
+53 204 326 396 446 520 770 795 836 855 
+
+==18615== 
+==18615== HEAP SUMMARY:
+==18615==     in use at exit: 176 bytes in 11 blocks
+==18615==   total heap usage: 11 allocs, 0 frees, 176 bytes allocated
+==18615== 
+==18615== 16 bytes in 1 blocks are definitely lost in loss record 1 of 3
+==18615==    at 0x4A08178: malloc (vg_replace_malloc.c:298)
+==18615==    by 0x400690: insertNode (project2_int_nimam_206.c:29)
+==18615==    by 0x400870: main (project2_int_nimam_206.c:120)
+==18615== 
+==18615== 160 (16 direct, 144 indirect) bytes in 1 blocks are definitely lost in loss record 3 of 3
+==18615==    at 0x4A08178: malloc (vg_replace_malloc.c:298)
+==18615==    by 0x400657: newList (project2_int_nimam_206.c:20)
+==18615==    by 0x400802: main (project2_int_nimam_206.c:114)
+==18615== 
+==18615== LEAK SUMMARY:
+==18615==    definitely lost: 32 bytes in 2 blocks
+==18615==    indirectly lost: 144 bytes in 9 blocks
+==18615==      possibly lost: 0 bytes in 0 blocks
+==18615==    still reachable: 0 bytes in 0 blocks
+==18615==         suppressed: 0 bytes in 0 blocks
+==18615== 
+==18615== For counts of detected and suppressed errors, rerun with: -v
+==18615== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 4 from 4)
+bash-4.1$ valgrind --leak-check=yes project2_int_nimam_206[1P_nimam_206[1P_nimam_206[1P_nimam_206d_nimam_206e_nimam_206c_nimam_206k_nimam_206
+==18618== Memcheck, a memory error detector
+==18618== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==18618== Using Valgrind-3.12.0 and LibVEX; rerun with -h for copyright info
+==18618== Command: project2_deck_nimam_206
+==18618== 
+Deck:
+
+(A,C) (1,C) (2,C) (3,C) (4,C) (5,C) (6,C) (7,C) (8,C) (9,C) (10,C) (J,C) (Q,C) (A,D) (1,D) (2,D) (3,D) (4,D) (5,D) (6,D) (7,D) (8,D) (9,D) (10,D) (J,D) (Q,D) (A,H) (1,H) (2,H) (3,H) (4,H) (5,H) (6,H) (7,H) (8,H) (9,H) (10,H) (J,H) (Q,H) (A,S) (1,S) (2,S) (3,S) (4,S) (5,S) (6,S) (7,S) (8,S) (9,S) (10,S) (J,S) (Q,S) 
+
+Shuffled Deck:
+
+(Q,S) (2,S) (5,H) (Q,D) (1,H) (1,D) (J,H) (10,H) (3,H) (7,H) (2,H) (Q,H) (8,D) (6,D) (10,S) (7,S) (8,C) (Q,C) (A,D) (4,C) (4,H) (1,S) (J,C) (A,H) (3,S) (3,C) (5,D) (A,S) (7,C) (2,D) (6,C) (6,S) (J,S) (2,C) (9,D) (8,S) (8,H) (9,C) (7,D) (9,H) (J,D) (1,C) (4,D) (5,C) (9,S) (10,D) (4,S) (5,S) (10,C) (3,D) (6,H) (A,C) 
+==18618== 
+==18618== HEAP SUMMARY:
+==18618==     in use at exit: 1,296 bytes in 54 blocks
+==18618==   total heap usage: 106 allocs, 52 frees, 2,544 bytes allocated
+==18618== 
+==18618== 24 bytes in 1 blocks are definitely lost in loss record 1 of 3
+==18618==    at 0x4A08178: malloc (vg_replace_malloc.c:298)
+==18618==    by 0x4006E7: newList (project2_deck_nimam_206.c:14)
+==18618==    by 0x400922: main (project2_deck_nimam_206.c:124)
+==18618== 
+==18618== 1,272 (24 direct, 1,248 indirect) bytes in 1 blocks are definitely lost in loss record 3 of 3
+==18618==    at 0x4A08178: malloc (vg_replace_malloc.c:298)
+==18618==    by 0x4006E7: newList (project2_deck_nimam_206.c:14)
+==18618==    by 0x40086F: randomShuffle (project2_deck_nimam_206.c:98)
+==18618==    by 0x400A8D: main (project2_deck_nimam_206.c:162)
+==18618== 
+==18618== LEAK SUMMARY:
+==18618==    definitely lost: 48 bytes in 2 blocks
+==18618==    indirectly lost: 1,248 bytes in 52 blocks
+==18618==      possibly lost: 0 bytes in 0 blocks
+==18618==    still reachable: 0 bytes in 0 blocks
+==18618==         suppressed: 0 bytes in 0 blocks
+==18618== 
+==18618== For counts of detected and suppressed errors, rerun with: -v
+==18618== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 4 from 4)
+bash-4.1$ make clean
+rm -f project2_int_nimam_206 project2_deck_nimam_206
+bash-4.1$ ls
+Makefile  project2_deck_nimam_206.c  project2_int_nimam_206.c  typescript_project2_nimam_206
+bash-4.1$ exit
+
+Script done on Wed 01 Nov 2017 11:31:23 PM EDT
